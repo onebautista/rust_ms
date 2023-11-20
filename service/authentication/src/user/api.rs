@@ -13,9 +13,9 @@ use crate::user::grpc_user::user_service_client::UserServiceClient;
 
 #[tonic::async_trait]
 pub trait UserApi {
-  async fn get_user_by_id(&self, request: Request<UserByIdRequest>) -> Result<Response<UserByIdResponse>, Error>;
-  async fn get_user_by_credentials(&self, request: Request<UserByCredentialsRequest>) -> Result<Response<UserByCredentialsResponse>, Error>;
-  async fn update_login_session_to_db(&self, request: Request<UpdateUserLoginSessionRequest>) -> Result<Response<EmptyResponse>, Error>;
+  async fn get_user_by_id(&self, request: Request<UserByIdRequest>) -> Result<Response<UserByIdResponse>, Status>;
+  async fn get_user_by_credentials(&self, request: Request<UserByCredentialsRequest>) -> Result<Response<UserByCredentialsResponse>, Status>;
+  async fn update_login_session_to_db(&self, request: Request<UpdateUserLoginSessionRequest>) -> Result<Response<EmptyResponse>, Status>;
 }
 
 pub struct  UserApiImpl {
@@ -32,8 +32,8 @@ impl UserApiImpl {
 impl UserApi for UserApiImpl {
   async fn get_user_by_id(&self, request: Request<UserByIdRequest>) -> Result<Response<UserByIdResponse>, Status> {
     let UserByIdRequest { id_user } = request.into_inner();
-    if id_user.is_empty() {
-        return status::Status::invalid_arguments(vec!["id"]);
+    if id_user.is_positive() {
+        return status::Status::invalid_arguments(vec!["id_user"]);
     }
 
     self.client
@@ -74,7 +74,7 @@ impl UserApi for UserApiImpl {
       .update_login_session_to_db(
           Request::new(
             EmptyResponse {
-                  user_name_or_email
+                  username_or_email
               }
           )
       ).await

@@ -14,7 +14,7 @@ mod user;
 const ACCOUNT_SERVICE_NAME: &str = "account";
 const TOKEN_SERVICE_NAME: &str = "token";
 const SERVICE_NAME: &str = "authentication";
-//const USER_SERVICE_NAME: &str = "user";
+const USER_SERVICE_NAME: &str = "user";
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
