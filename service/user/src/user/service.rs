@@ -68,7 +68,7 @@ impl UserService for UserServiceImpl {
           ),
           Err(error) => status::Status::internal( error)
         },
-        Err(error) => status::Status::not_found(error)
+        Err(error) => status::Status::not_found( error )
       }
     }
 }

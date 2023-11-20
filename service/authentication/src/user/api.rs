@@ -15,7 +15,7 @@ use crate::user::grpc_user::user_service_client::UserServiceClient;
 pub trait UserApi {
   async fn get_user_by_id(&self, request: Request<UserByIdRequest>) -> Result<Response<UserByIdResponse>, Status>;
   async fn get_user_by_credentials(&self, request: Request<UserByCredentialsRequest>) -> Result<Response<UserByCredentialsResponse>, Status>;
-  async fn update_login_session_to_db(&self, request: Request<UpdateUserLoginSessionRequest>) -> Result<Response<EmptyResponse>, Status>;
+  async fn update_user_login_session(&self, request: Request<UpdateUserLoginSessionRequest>) -> Result<Response<EmptyResponse>, Status>;
 }
 
 pub struct  UserApiImpl {
@@ -23,7 +23,7 @@ pub struct  UserApiImpl {
 }
 
 impl UserApiImpl { 
-  fn new(client: UserServiceClient<Channel>) -> Box<dyn UserApi + Send + Sync> {
+  pub fn new(client: UserServiceClient<Channel>) -> Box<dyn UserApi + Send + Sync> {
     Box::new(UserApiImpl { client })
   }
 }
@@ -63,7 +63,7 @@ impl UserApi for UserApiImpl {
         ).await
   }
 
-  async fn update_login_session_to_db(&self, request: Request<UpdateUserLoginSessionRequest>) -> Result<Response<EmptyResponse>, Status> {
+  async fn update_user_login_session(&self, request: Request<UpdateUserLoginSessionRequest>) -> Result<Response<EmptyResponse>, Status> {
     let UpdateUserLoginSessionRequest { username_or_email } = request.into_inner();
     if username_or_email.is_empty() {
       return status::Status::invalid_arguments(vec!["username_or_email"]);
@@ -71,12 +71,11 @@ impl UserApi for UserApiImpl {
 
   self.client
       .clone()
-      .update_login_session_to_db(
+      .update_user_login_session(
           Request::new(
-            EmptyResponse {
-                  username_or_email
-              }
+            UpdateUserLoginSessionRequest { username_or_email }
           )
       ).await
   }
+
 }

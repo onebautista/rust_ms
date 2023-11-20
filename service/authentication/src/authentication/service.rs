@@ -2,7 +2,7 @@ use tonic::{Request, Response, Status};
 
 use crate::account::entity::Role;
 use crate::authentication;
-use crate::authentication::entity::TokenPair;
+use crate::authentication::entity::{TokenPair, TokenOnePair};
 use crate::authentication::pb::{ 
     ChangePasswordRequest, ChangePasswordResponse, RefreshTokenRequest, RefreshTokenResponse, 
     Role as RoleMessage, 
@@ -67,7 +67,22 @@ impl AuthenticationService for AuthenticationServiceImpl {
     }
 
     async fn sign_in_one(&self, request: Request<SignInOneRequest>) -> Result<Response<SignInOneResponse>, Status> {
-        todo!()
+        let SignInOneRequest { username_or_email, user_password } = request.into_inner();
+        if username_or_email.is_empty() || user_password.is_empty() {
+            return status::Status::invalid_arguments(vec!["username_or_email", "user_password"]);
+        }
+
+        match self.interactor.sign_in_one(&username_or_email, &user_password).await {
+            Ok(TokenOnePair { access_token }) => Ok(
+                Response::new(
+                    SignInOneResponse {
+                        access_token,
+                        //refresh_token,
+                    }
+                )
+            ),
+            Err(error) => status::Status::internal(error)
+        }
     }
 
     async fn sign_out(&self, request: Request<SignOutRequest>) -> Result<Response<SignOutResponse>, Status> {

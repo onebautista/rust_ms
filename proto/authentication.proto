@@ -53,8 +53,8 @@ message SignInRequest{
 }
 
 message SignInOneRequest {
-  string email = 1;
-  string password = 2;
+  string username_or_email = 1;
+  string user_password = 2;
 }
 
 message SignInOneResponse {

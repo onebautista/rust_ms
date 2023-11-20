@@ -59,7 +59,6 @@ impl UserRepository for UserRepositoryImpl {
         .execute(conn);
       
       Ok(())
-
     } 
    
     async fn generate_login_session(&self) -> Result<String, Error> {

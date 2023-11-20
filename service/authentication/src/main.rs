@@ -4,6 +4,7 @@ use std::net::SocketAddr;
 use tonic::transport::{Channel, Server};
 
 use crate::account::pb::account_service_client::AccountServiceClient;
+use crate::user::grpc_user::user_service_client::UserServiceClient;
 use crate::token::pb::token_service_client::TokenServiceClient;
 
 mod account;
