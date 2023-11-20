@@ -1,0 +1,99 @@
+syntax = "proto3";
+package user;
+
+message User {
+    int32 id = 1;
+    string username = 2;
+    string email = 3;
+    string password = 4;
+    optional int32 store_id = 5;
+    optional int32 branch_id = 6;
+    string login_session = 7;
+}
+
+message CreateUserRequest{
+    string username = 1;
+    string email = 2;
+    string password = 3;
+    optional int32 store_id = 4;
+    optional int32 branch_id = 5;
+    string login_session = 6;
+}
+
+message CreateUserResponse{
+    int32 id_user = 1;
+}
+
+message UserByCredentialsRequest {
+    string username_or_email = 1;
+    string user_password = 2;
+    //optional permissions: Option<Vec<String>>
+}
+
+message UserByCredentialsResponse{
+    User user = 1;
+}
+
+message UserByIdRequest {
+    int32 id_user = 1;
+}
+
+message UserByIdResponse {
+    User user = 1;
+}
+
+message UpdateUserLoginSessionRequest {
+    string username_or_email = 1;
+}
+message EmptyResponse {}
+
+service UserService {
+  rpc GetUserById (UserByIdRequest) returns (UserByIdResponse);
+  rpc GetUserByCredentials(UserByCredentialsRequest) returns (UserByCredentialsResponse);
+  rpc UpdateUserLoginSession(UpdateUserLoginSessionRequest) returns (EmptyResponse);
+}
+
+
+/*service UserService {
+  rpc GetUser (UserRequest) returns (UserReply) {}
+  rpc ListUser(Empty) returns (User) {}
+  rpc CreateUser (CreateUserRequest) returns (CreateUserReply) {}
+  rpc UpdateUser (UpdateUserRequest) returns (UpdateUserReply) {}
+  rpc DeleteUser (UserRequest) returns (DeleteUserReply) {}
+}
+
+message Empty {}
+
+message UserRequest {
+   int32 id = 1;
+}
+
+message UserReply {
+    int32 id = 1;
+    string name = 2;
+}
+
+message CreateUserRequest {
+    string name = 2;
+}
+
+message CreateUserReply {
+    string message = 1;
+}
+
+message UpdateUserRequest {
+    string id = 1;
+    string name = 2;
+}
+
+message UpdateUserReply {
+    string message = 1;
+}
+
+message DeleteUserReply {
+    string message = 1;
+}
+
+message User {
+    repeated UserReply User = 1;
+}*/
