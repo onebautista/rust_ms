@@ -1,5 +1,5 @@
 use tonic::Request;
-
+use crate::user;
 use crate::user::api::UserApi;
 use crate::user::entity::User;
 use  crate::user::grpc_user::{
@@ -42,7 +42,9 @@ impl UserRepository for UserRepositoryImpl {
         Ok(user.map(|u| u.into()))
     }
 
-    async fn get_user_by_credentials(&self, username_or_email: &str, user_password: &str) -> Result<Option<User>, Error> {
+    async fn get_user_by_credentials(&self, username_or_email: &str, user_password: &str) -> Result<Option<user::entity::User>, Error> {
+      println!("repo: {:?}", username_or_email);
+      println!("repo: {:?}", user_password);
       let UserByCredentialsResponse { user } = self.api.get_user_by_credentials(
           Request::new(
               UserByCredentialsRequest {

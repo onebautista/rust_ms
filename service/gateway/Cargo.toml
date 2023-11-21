@@ -5,10 +5,10 @@ edition = "2021"
 
 [dependencies]
 configuration = { path = "../../library/configuration" }
-tonic = "0.9.1"
-prost = "0.11.6"
+tonic = "0.10.2"
+prost = "0.12.2"
 tokio = { version = "1.24.2", features = ["rt-multi-thread"] }
 
 [build-dependencies]
 protoc-bin-vendored = "3.0.0"
-tonic-build = "0.9.1"
+tonic-build = "0.10.2"

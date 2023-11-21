@@ -43,7 +43,7 @@ impl AccountApi for AccountApiImpl {
     async fn get_account_by_credentials(&self, request: Request<GetAccountByCredentialsRequest>) -> Result<Response<GetAccountByCredentialsResponse>, Status> {
         let GetAccountByCredentialsRequest { email, password } = request.into_inner();
         if email.is_empty() || password.is_empty() {
-            return status::Status::invalid_arguments(vec!["email", "password"]);
+            return status::Status::invalid_arguments(vec!["email.......", "password"]);
         }
 
         self.client

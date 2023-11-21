@@ -32,7 +32,7 @@ impl UserApiImpl {
 impl UserApi for UserApiImpl {
   async fn get_user_by_id(&self, request: Request<UserByIdRequest>) -> Result<Response<UserByIdResponse>, Status> {
     let UserByIdRequest { id_user } = request.into_inner();
-    if id_user.is_positive() {
+    if !id_user.is_positive() {
         return status::Status::invalid_arguments(vec!["id_user"]);
     }
 
@@ -46,9 +46,11 @@ impl UserApi for UserApiImpl {
   }
 
   async fn get_user_by_credentials(&self, request: Request<UserByCredentialsRequest>) -> Result<Response<UserByCredentialsResponse>, Status> {
+    println!("user api ms {:?}", request);
+       
     let UserByCredentialsRequest { username_or_email, user_password } = request.into_inner();
     if username_or_email.is_empty() || user_password.is_empty() {
-        return status::Status::invalid_arguments(vec!["username_or_email", "user_password"]);
+        return status::Status::invalid_arguments(vec!["username_or_email....", "user_password"]);
     }
 
     self.client

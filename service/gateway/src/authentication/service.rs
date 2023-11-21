@@ -31,12 +31,13 @@ impl AuthenticationService for AuthenticationServiceImpl {
     }
 
     async fn sign_in(&self, request: Request<SignInRequest>) -> Result<Response<SignInResponse>, Status> {
+        println!("Got a request: {:?}", request);
         self.client.clone().sign_in(request).await
     }
 
     async fn sign_in_one(&self, request: Request<SignInOneRequest>) -> Result<Response<SignInOneResponse>, Status> {
-        //self.client.clone().sign_in(request).await
-        todo!()
+        println!("request gateway: {:?}", request);
+        self.client.clone().sign_in_one(request).await
     }
 
     async fn sign_out(&self, request: Request<SignOutRequest>) -> Result<Response<SignOutResponse>, Status> {
